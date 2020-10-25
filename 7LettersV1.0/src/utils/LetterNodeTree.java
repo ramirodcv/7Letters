@@ -1,5 +1,7 @@
 package utils;
 
+import java.util.Arrays;
+
 import static utils.Constants.*;
 
 /**
@@ -9,6 +11,7 @@ public class LetterNodeTree {
     // stores self. see constructor for more info
     private static LetterNodeTree self = null;
     private LetterNode mHead = new LetterNode();
+    private int mComboSize;
 
     private int mMaxCount = 0;
     private int mBestCombo = 0;
@@ -31,6 +34,12 @@ public class LetterNodeTree {
      */
     public void empty() {
         mHead.addBranches(NUM_LETTERS);
+        mMaxCount = 0;
+        mBestCombo = 0;
+    }
+
+    public void setComboSize(int comboSize) {
+        mComboSize = comboSize;
     }
 
     /**
@@ -103,11 +112,10 @@ public class LetterNodeTree {
     }
 
     // returns the array as a bit representation of letters
-    private static  int arrayToInt(int[] combo) {
+    private int arrayToInt(int[] combo) {
         int letters = 0;
-
         // for each
-        for(int i = 0; i < LETTERS_PER_COMBO; i++) {
+        for(int i = 0; i < mComboSize; i++) {
             letters |= (1 << combo[i]);
         }
         return letters;

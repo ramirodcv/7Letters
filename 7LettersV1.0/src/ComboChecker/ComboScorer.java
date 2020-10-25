@@ -32,20 +32,22 @@ public class ComboScorer {
      * @param file the .txt file to find the best combo for
      * @return A Combo object containing information about the best combo found. Returns null if file is not found
      */
-    public Combo getBestCombo(String file) {
+    public Combo getBestCombo(String file, int comboSize) {
         // return null if file not found
-        if(!FileParser.parse(file, mTree))
+        if(!FileParser.parse(file, mTree, comboSize))
         {
             return null;
         }
 
+        mTree.setComboSize(comboSize);
+
         // make the checkers and set the range of letters they will check
         ComboChecker[] checkers = new ComboChecker[mNumGates];
         for(int i = 0; i < mNumGates - 1; i++) {
-            checkers[i] = new ComboChecker(i, i + 1, mTree, this);
+            checkers[i] = new ComboChecker(i, i + 1, mTree, comboSize, this);
         }
         // create the last checker
-        checkers[mNumGates - 1] = new ComboChecker(mNumGates - 2, NUM_LETTERS - LETTERS_PER_COMBO - 1, mTree, this);
+        checkers[mNumGates - 1] = new ComboChecker(mNumGates - 2, NUM_LETTERS - comboSize - 1, mTree, comboSize, this);
 
         // reset gates and start the ComboChecker threads
         mGatesLeft = mNumGates;
@@ -54,8 +56,10 @@ public class ComboScorer {
         }
 
         waitForFinish();
+
+        Combo bestCombo = new Combo(mTree.getBestCombo(), mTree.getMaxCount());
         mTree.empty();
-        return new Combo(mTree.getBestCombo(), mTree.getMaxCount());
+        return bestCombo;
 
     }
 

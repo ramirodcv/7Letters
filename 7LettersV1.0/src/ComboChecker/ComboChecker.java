@@ -3,7 +3,8 @@ package ComboChecker;
 
 import utils.LetterNodeTree;
 
-import static utils.Constants.LETTERS_PER_COMBO;
+import java.util.Arrays;
+
 import static utils.Constants.NUM_LETTERS;
 
 public class ComboChecker implements Runnable {
@@ -12,12 +13,14 @@ public class ComboChecker implements Runnable {
     private int mStart;
     private int mEnd;
     private LetterNodeTree mTree;
+    private  int mComboSize;
     private ComboScorer mStarter;
 
-    public ComboChecker(int start, int end, LetterNodeTree tree, ComboScorer starter) {
+    public ComboChecker(int start, int end, LetterNodeTree tree, int comboSize, ComboScorer starter) {
         mStart = start;
         mEnd = end;
         mTree = tree;
+        mComboSize = comboSize;
         mStarter = starter;
     }
 
@@ -27,10 +30,10 @@ public class ComboChecker implements Runnable {
     @Override
     public void run() {
         // combo: each letter is ranked by their frequency index
-        int[] combo = new int[LETTERS_PER_COMBO];
+        int[] combo = new int[mComboSize];
 
         // make the first combo: {0, 1, 2, 3,...}
-        for (int i = 0; i < LETTERS_PER_COMBO; i++) {
+        for (int i = 0; i < mComboSize; i++) {
             combo[i] = i + mStart;
         }
 
@@ -40,12 +43,12 @@ public class ComboChecker implements Runnable {
 
             // find the next combo
             // see: https://www.baeldung.com/java-combinations-algorithm
-            int t = LETTERS_PER_COMBO - 1;
-            while (t != 0 && combo[t] == NUM_LETTERS - LETTERS_PER_COMBO + t) {
+            int t = mComboSize - 1;
+            while (t != 0 && combo[t] == NUM_LETTERS - mComboSize + t) {
                 t--;
             }
             combo[t]++;
-            for(int x = t + 1; x < LETTERS_PER_COMBO; x++) {
+            for(int x = t + 1; x < mComboSize; x++) {
                 combo[x] = combo[x - 1] + 1;
             }
         }
@@ -59,11 +62,11 @@ public class ComboChecker implements Runnable {
      *              {0, 1, 3} -> ...001011
      * @return The combo represented as a bit
      */
-    private static  int arrayToInt(int[] combo) {
+    private  int arrayToInt(int[] combo) {
         int letters = 0;
 
         // for each
-        for(int i = 0; i < LETTERS_PER_COMBO; i++) {
+        for(int i = 0; i < mComboSize; i++) {
             letters |= (1 << combo[i]);
         }
         return letters;
