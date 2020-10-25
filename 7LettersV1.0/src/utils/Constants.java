@@ -5,6 +5,7 @@ import ComboChecker.Combo;
 public class Constants {
 
     public static final int RUNS_PER_TESTS = 50;
+    public static final int THREADS_PER_TEST = 4;
 
     // letters by usage
     public static final char[] LETTERS = {
