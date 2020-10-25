@@ -4,6 +4,8 @@ import ComboChecker.Combo;
 
 public class Constants {
 
+    public static final int RUNS_PER_TESTS = 50;
+
     // letters by usage
     public static final char[] LETTERS = {
             'e', 'a', 'r', 'i', 'o',
@@ -27,25 +29,29 @@ public class Constants {
     public enum TXT_FILES {
         NULL,
         ENGLISH_WORDS7,
-        ENGLISH_WORDS6;
+        ENGLISH_WORDS6,
+        SIMPLE3;
 
         String[] mFilePaths = {
                 "this is not a valid file",
-                "7LettersV1.0\\src\\TextFiles\\englishWords.txt",
-                "7LettersV1.0\\src\\TextFiles\\englishWords.txt"
+                "TextFiles\\englishWords.txt",
+                "TextFiles\\englishWords.txt",
+                "TextFiles\\simple.txt"
         };
 
 
         Combo[] mAnswers = {
-              null,
-              new Combo("eartslp", 622),
-              new Combo("eartslp", 622),
+                null,
+                new Combo("eartslp", 622),
+                new Combo("eartsp", 345),
+                new Combo("cat", 4)
         };
 
         int[] mLetterPerCombo = {
                 0,
                 7,
-                6
+                6,
+                3
         };
 
         public String file() {
