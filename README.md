@@ -6,6 +6,7 @@ Author: Ramiro Deo-Campo Vuong
 Contributors:
 
 Mr. Brian King
+
 He is former Microsoft employee	that mentored my high school robotics team.
 The LetterNodeTree data structure was his idea. I had come close to something resembling it,
 but nothing quite as fast. He also showed me the methods found in the tricks section.
@@ -13,6 +14,7 @@ Note: Mr. King explained to me how his various ideas worked. All of my code is o
 outside of handling threads and finding combinations.
 
 https://www.baeldung.com/java-combinations-algorithm
+
 I use code from this website to find combinations of letters
 
 
