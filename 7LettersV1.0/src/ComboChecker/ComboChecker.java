@@ -12,9 +12,9 @@ public class ComboChecker implements Runnable {
     private int mStart;
     private int mEnd;
     private LetterNodeTree mTree;
-    private CheckStarter mStarter;
+    private ComboScorer mStarter;
 
-    public ComboChecker(int start, int end, LetterNodeTree tree, CheckStarter starter) {
+    public ComboChecker(int start, int end, LetterNodeTree tree, ComboScorer starter) {
         mStart = start;
         mEnd = end;
         mTree = tree;
@@ -26,15 +26,11 @@ public class ComboChecker implements Runnable {
      */
     @Override
     public void run() {
-        long startTime = System.currentTimeMillis();
-
-        // the number of words the combo can spell
-        int count = 0;
         // combo: each letter is ranked by their frequency index
-        int[] combo = new int[NUM_LETTERS];
+        int[] combo = new int[LETTERS_PER_COMBO];
 
         // make the first combo: {0, 1, 2, 3,...}
-        for (int i = 0; i < NUM_LETTERS; i++) {
+        for (int i = 0; i < LETTERS_PER_COMBO; i++) {
             combo[i] = i + mStart;
         }
 
@@ -44,7 +40,7 @@ public class ComboChecker implements Runnable {
 
             // find the next combo
             // see: https://www.baeldung.com/java-combinations-algorithm
-            int t = NUM_LETTERS - 1;
+            int t = LETTERS_PER_COMBO - 1;
             while (t != 0 && combo[t] == NUM_LETTERS - LETTERS_PER_COMBO + t) {
                 t--;
             }

@@ -1,10 +1,12 @@
 package utils;
 
-import utils.Constants;
-
 import static utils.Constants.*;
 
+/**
+ * this tree is inspired by a bit tree, except it represents sets of chars.
+ */
 public class LetterNodeTree {
+    // stores self. see constructor for more info
     private static LetterNodeTree self = null;
     private LetterNode mHead = new LetterNode();
 
@@ -12,9 +14,11 @@ public class LetterNodeTree {
     private int mBestCombo = 0;
 
     private LetterNodeTree() {
-        mHead.addBranches(Constants.NUM_LETTERS);
+        empty();
     }
 
+    // returns a stored object
+    // this class is instantiated once at most
     public static LetterNodeTree getTree() {
         if(self == null) {
             self = new LetterNodeTree();
@@ -22,14 +26,28 @@ public class LetterNodeTree {
         return self;
     }
 
+    /**
+     * empty this tree of stored strings
+     */
+    public void empty() {
+        mHead.addBranches(NUM_LETTERS);
+    }
+
+    /**
+     * add a new word to the tree
+     * @param word the word to be added to the tree (should be in bit form)
+     */
     public void add(int word) {
         int index = 0;
-        int branchCount = NUM_LETTERS - 1;
+        int branchCount = NUM_LETTERS - 1; // number of branches the next node should have
         LetterNode current = mHead;
 
+        // while the word is not processed
         while(word > 0) {
             if((word & 1) == 1) {
+                // move down the correct branch
                 current = current.passWord(index, branchCount);
+                // the next node has 1 less branch. Decrement index.
                 index = -1;
             }
             index++;
@@ -39,12 +57,21 @@ public class LetterNodeTree {
         current.mCount++;
     }
 
+    /**
+     * scores a combo of letters
+     * @param combo each index represents a letter based on Constants.LETTERS
+     */
     public void scoreCombo(int[] combo) {
+        // check if the branch to go down has been crated
         if(mHead.mNextNodes[combo[0]] == null) {
             return;
         }
+
+        // only score the combo if it has potential to beat mMaxCount
         if(mHead.mNextNodes[combo[0]].mWordsPassed > mMaxCount) {
             int count = getCount(mHead, arrayToInt(combo));
+
+            // check if new mMaxCount has been found
             synchronized (this) {
                 if(count > mMaxCount) {
                     mMaxCount = count;
@@ -54,22 +81,28 @@ public class LetterNodeTree {
         }
     }
 
-    private int getCount(LetterNode node, int word) {
+    // acts recursively to count how many words the combo can make
+    private int getCount(LetterNode node, int combo) {
         int count = node.mCount;
         int index = 0;
 
-        while(word > 0) {
-            if((node.mNextNodes[index] != null) && (word & 1) == 1) {
-                word >>>= 1;
-                count += getCount(node.mNextNodes[index], word);
+        // while the combo is not fully processed
+        while(combo > 0) {
+            // travel down a branch, because it represents the combo
+            if((node.mNextNodes[index] != null) && (combo & 1) == 1) {
+                combo >>>= 1;
+                count += getCount(node.mNextNodes[index], combo);
+
+            // branch does not represent the combo
             } else {
-                word >>>= 1;
+                combo >>>= 1;
             }
             index++;
         }
         return count;
     }
 
+    // returns the array as a bit representation of letters
     private static  int arrayToInt(int[] combo) {
         int letters = 0;
 
@@ -80,6 +113,7 @@ public class LetterNodeTree {
         return letters;
     }
 
+    // get the best combo as a string
     public String getBestCombo() {
         return intToString(mBestCombo);
     }
@@ -88,6 +122,7 @@ public class LetterNodeTree {
         return mMaxCount;
     }
 
+    // returns the bit representation of letters as a string
     public static String intToString(int letters) {
         String s = "";
         for (int i = 0; i < NUM_LETTERS; i ++) {
@@ -98,10 +133,14 @@ public class LetterNodeTree {
         return s;
     }
 
+    // nodes of the tree
+    // the number of branches for each node depends on how many letters have been searched by prior nodes.
+    // i.e if 'e' (the most frequent letter) is represented by the parent node,
+    // then this node will not have a branch representing 'e'
     protected class LetterNode {
-        protected LetterNode[] mNextNodes;
-        protected int mCount;
-        protected int mWordsPassed;
+        protected LetterNode[] mNextNodes; // branches
+        protected int mCount;       // words ending at this node
+        protected int mWordsPassed; // words passed through this node
 
         protected void addBranches(int numBranches) {
             mNextNodes = new LetterNode[numBranches];

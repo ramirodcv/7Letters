@@ -11,7 +11,6 @@ import static utils.Constants.LETTER_FREQ;
 
 public class FileParser {
     public static boolean parse(String file, LetterNodeTree tree) {
-
         try {
             byte[] letters = Files.readAllBytes(Paths.get(file));
             int word = 0;
