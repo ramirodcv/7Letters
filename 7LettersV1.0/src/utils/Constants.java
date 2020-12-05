@@ -4,7 +4,7 @@ import ComboChecker.Combo;
 
 public class Constants {
 
-    public static final int RUNS_PER_TESTS = 50;
+    public static final int RUNS_PER_TESTS = 10;
     public static final int THREADS_PER_TEST = 4;
 
     // letters by usage
@@ -37,11 +37,17 @@ public class Constants {
                 "this is not a valid file",
                 "TextFiles\\englishWords.txt",
                 "TextFiles\\englishWords.txt",
+                "TextFiles\\englishWords.txt",
+                "TextFiles\\englishWords.txt",
+                "TextFiles\\englishWords.txt",
                 "TextFiles\\simple.txt"
         };
 
 
-        Combo[] mAnswers = {
+        Combo[] mAnswers = { //null means answer unknown
+                null,
+                null,
+                null,
                 null,
                 new Combo("eartslp", 622),
                 new Combo("eartsp", 345),
@@ -50,6 +56,9 @@ public class Constants {
 
         int[] mLetterPerCombo = {
                 0,
+                10,
+                9,
+                8,
                 7,
                 6,
                 3

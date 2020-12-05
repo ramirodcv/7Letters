@@ -14,8 +14,6 @@ public class ComboScorer {
     private int mGatesLeft;
     private LetterNodeTree mTree = LetterNodeTree.getTree();
 
-    private String mFile;
-
 
     /**
      *

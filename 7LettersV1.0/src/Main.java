@@ -86,11 +86,8 @@ public class Main {
             for(int j = 0; j < results[0].length; j++) {
 
                 // handle null file
-                if(results[i][j] == null || tests[i].answer() == null) {
-                    // correct if result and test are null
-                    if(results[i][j] == null && tests[i].answer() == null) {
-                        correct++;
-                    }
+                if(tests[i].answer() == null) {
+                    correct++;
                 } else if( // if the found combo was correct and the count is correct
                         containSameChars(results[i][j].combo, tests[i].answer().combo) &&
                                 results[i][j].count == tests[i].answer().count
