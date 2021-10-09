@@ -1,4 +1,4 @@
-# 7Letters
+# 7Letters (V1.0 works best)
 
 Author: Ramiro Deo-Campo Vuong
 
