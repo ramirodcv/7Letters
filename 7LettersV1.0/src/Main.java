@@ -1,6 +1,7 @@
 import ComboChecker.ComboScorer;
 import ComboChecker.Combo;
 import utils.Constants;
+import utils.TextFile;
 
 public class Main {
 
@@ -15,7 +16,7 @@ public class Main {
 
         // get the tests
         int runsPerTest = Constants.RUNS_PER_TESTS;
-        Constants.TXT_FILES[] tests = Constants.TXT_FILES.values();
+        TextFile[] tests = Constants.TESTS;
         Combo[][] results = new Combo[tests.length][runsPerTest];
         long[] totalTime = new long[tests.length];
         int totalRuns = runsPerTest * tests.length;
@@ -30,7 +31,7 @@ public class Main {
 
             // run the tests
             for(int j = 0; j < runsPerTest; j++) {
-                results[i][j] = scorer.getBestCombo(tests[i].file(), tests[i].comboSize());
+                results[i][j] = scorer.getBestCombo(tests[i].path, tests[i].lettersPerCombo);
 
                 // handle completion bar
                 if(showCompBar) {
@@ -80,17 +81,17 @@ public class Main {
      * @param tests the test answers
      * @return the number of results that where correct
      */
-    public static int getNumCorrect(Combo[][] results, Constants.TXT_FILES[] tests) {
+    public static int getNumCorrect(Combo[][] results, TextFile[] tests) {
         int correct = 0;
         for(int i = 0; i < tests.length; i++) {
             for(int j = 0; j < results[0].length; j++) {
 
                 // handle null file
-                if(tests[i].answer() == null) {
+                if(tests[i].answer == null) {
                     correct++;
                 } else if( // if the found combo was correct and the count is correct
-                        containSameChars(results[i][j].combo, tests[i].answer().combo) &&
-                                results[i][j].count == tests[i].answer().count
+                        containSameChars(results[i][j].combo, tests[i].answer.combo) &&
+                                results[i][j].count == tests[i].answer.count
                 ) {
                     correct++;
                 }
@@ -105,17 +106,17 @@ public class Main {
      * @param tests the test answers
      * @param totalTime the time used for each set of tests
      */
-    public static void printResults(Combo[][] results, Constants.TXT_FILES[] tests, long[] totalTime) {
+    public static void printResults(Combo[][] results, TextFile[] tests, long[] totalTime) {
         // for each test
         for(int i = 0; i < tests.length; i++) {
             // print name
-            System.out.println("\t" + tests[i].file() + ":");
+            System.out.println("\t" + tests[i].path + ":");
 
             // print results
             if(results[i][0] == null) {
                 System.out.println("\t\tnull");
             } else {
-                System.out.println("\t\tcomboSize: " + tests[i].comboSize());
+                System.out.println("\t\tcomboSize: " + tests[i].lettersPerCombo);
                 System.out.println("\t\t" + results[i][0].toString());
             }
 

@@ -83,7 +83,7 @@ public class LetterNodeTree {
             // check if new mMaxCount has been found
             synchronized (this) {
                 if(count > mMaxCount) {
-                    mMaxCount = count;
+                mMaxCount = count;
                     mBestCombo = arrayToInt(combo);
                 }
             }
